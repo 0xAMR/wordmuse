@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+# Wordmuse
+
+Wordmuse is a query engine built on top of the Datamuse API. It provides users with the ability to find words that match strict criteria and/or are found in specific contexts. Search parameters include spelling, meaning, sound, prefixes, suffixes, rhythmicity etc.
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
