@@ -1,5 +1,11 @@
+// React
+import { useState } from 'react';
+
 // Styling
 import styled from 'styled-components';
+
+// Components
+import Results from './components/Results';
 
 // Ant Design
 import { Input, Layout, Menu, Typography } from 'antd';
@@ -13,6 +19,7 @@ const StyledApp = styled.main`
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  overflow: hidden;
 
   & .main__layout {
     background-color: rgba(252, 252, 252);
@@ -66,7 +73,8 @@ const StyledApp = styled.main`
   }
 `;
 
-function App() {
+export default function App() {
+  const [resultsActive, setResultsActive] = useState(false);
   return (
     <StyledApp>
       <Layout className="layout main__layout">
@@ -83,17 +91,16 @@ function App() {
             world's favourite word query engine
           </Title>
           <Search
-            style={{ width: 500 }}
+            style={{ maxWidth: 500 }}
             placeholder="Enter word"
             size="large"
-            onSearch={() => {}}
+            onSearch={() => setResultsActive(true)}
             enterButton
           />
         </Content>
+        {resultsActive && <Results />}
         <Footer className="main__footer">© Wordmuse 2021</Footer>
       </Layout>
     </StyledApp>
   );
 }
-
-export default App;
