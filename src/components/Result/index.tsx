@@ -1,12 +1,16 @@
-// Styling
-// import styled from 'styled-components';
-
 // Ant Design
 import { Divider, Layout, Typography } from 'antd';
 const { Content } = Layout;
 const { Title } = Typography;
 
-export default function Results() {
+type ResultsProps = {
+  title: string,
+  description: string,
+}
+
+
+
+export default function Results({title, description}: ResultsProps) {
   return (
     <Content>
       <Title className="main__title">Result</Title>
