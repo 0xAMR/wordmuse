@@ -4,19 +4,16 @@ const { Content } = Layout;
 const { Title } = Typography;
 
 type ResultsProps = {
-  title: string,
-  description: string,
-}
+  title: string;
+  description: string;
+};
 
-
-
-export default function Results({title, description}: ResultsProps) {
+export default function Result({ title, description }: ResultsProps) {
   return (
     <Content>
-      <Title className="main__title">Result</Title>
+      <Title className="main__title">{title}</Title>
       <Title className="main__subtitle" level={5}>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officiis,
-        deserunt.
+        {description}
       </Title>
       <Divider />
     </Content>

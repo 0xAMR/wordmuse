@@ -5,7 +5,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 // Components
-import Result from './components/Result';
+import ResultsList from './components/ResultsList';
 
 // Ant Design
 import { Input, Layout, Menu, Typography } from 'antd';
@@ -73,8 +73,19 @@ const StyledApp = styled.main`
   }
 `;
 
+const mockData = [
+  { word: 'fretful', score: 398, numSyllables: 2 },
+  { word: 'regretful', score: 302, numSyllables: 3 },
+  { word: 'threatful', score: 129, numSyllables: 2 },
+  { word: 'netful', score: 28, numSyllables: 2 },
+  { word: 'let phil', numSyllables: 2 },
+  { word: 'met phil', numSyllables: 2 },
+  { word: 'set fill', numSyllables: 2 },
+];
+
 export default function App() {
   const [resultsActive, setResultsActive] = useState(false);
+
   return (
     <StyledApp>
       <Layout className="layout main__layout">
@@ -85,19 +96,23 @@ export default function App() {
             <Menu.Item>API</Menu.Item>
           </Menu>
         </Header>
-        {!resultsActive ? <Content className="main__content">
-          <Title className="main__title">Wordmuse</Title>
-          <Title className="main__subtitle" level={5}>
-            world's favourite word query engine
-          </Title>
-          <Search
-            style={{ maxWidth: 500 }}
-            placeholder="Enter word"
-            size="large"
-            onSearch={() => setResultsActive(true)}
-            enterButton
-          />
-        </Content> : <Result title="a" description="a" />}
+        {!resultsActive ? (
+          <Content className="main__content">
+            <Title className="main__title">Wordmuse</Title>
+            <Title className="main__subtitle" level={5}>
+              world's favourite word query engine
+            </Title>
+            <Search
+              style={{ maxWidth: 500 }}
+              placeholder="Enter word"
+              size="large"
+              onSearch={() => setResultsActive(true)}
+              enterButton
+            />
+          </Content>
+        ) : (
+          <ResultsList data={mockData} />
+        )}
         <Footer className="main__footer">© Wordmuse 2021</Footer>
       </Layout>
     </StyledApp>
