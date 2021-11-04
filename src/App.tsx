@@ -73,18 +73,35 @@ const StyledApp = styled.main`
   }
 `;
 
-const mockData = [
-  { word: 'fretful', score: 398, numSyllables: 2 },
-  { word: 'regretful', score: 302, numSyllables: 3 },
-  { word: 'threatful', score: 129, numSyllables: 2 },
-  { word: 'netful', score: 28, numSyllables: 2 },
-  { word: 'let phil', numSyllables: 2 },
-  { word: 'met phil', numSyllables: 2 },
-  { word: 'set fill', numSyllables: 2 },
-];
-
 export default function App() {
   const [resultsActive, setResultsActive] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
+  const [wordInput, setWordInput] = useState('');
+
+  /**
+   * take word, get data from api
+   *
+   * @param {string} word input string
+   * @returns words that match the input string
+   */
+  async function getData(word: string) {
+    const response = await fetch(
+      `https://api.datamuse.com/words?rel_rhy=${word}`
+    );
+    const data = await response.json();
+
+    return data;
+  }
+
+  /**
+   * handle search by getting and displaying data
+   */
+  const handleSearch = () => {
+    getData(wordInput).then((data) => {
+      setSearchResults(data);
+      setResultsActive(true);
+    });
+  };
 
   return (
     <StyledApp>
@@ -100,18 +117,23 @@ export default function App() {
           <Content className="main__content">
             <Title className="main__title">Wordmuse</Title>
             <Title className="main__subtitle" level={5}>
-              world's favourite word query engine
+              Find words that rhyme with your input
             </Title>
             <Search
               style={{ maxWidth: 500 }}
               placeholder="Enter word"
               size="large"
-              onSearch={() => setResultsActive(true)}
+              onChange={(e) => setWordInput(e.target.value)}
+              onSearch={handleSearch}
               enterButton
             />
           </Content>
         ) : (
-          <ResultsList data={mockData} />
+          <ResultsList
+            data={searchResults}
+            wordInput={wordInput}
+            backHome={() => setResultsActive(false)}
+          />
         )}
         <Footer className="main__footer">© Wordmuse 2021</Footer>
       </Layout>
