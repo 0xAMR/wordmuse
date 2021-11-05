@@ -24,14 +24,23 @@ const StyledList = styled.div`
 type ResultsListProps = {
   data: object;
   wordInput: string;
+  wordType: string;
   backHome: () => void;
 };
 
 export default function ResultsList({
   data,
   wordInput,
+  wordType,
   backHome,
 }: ResultsListProps): JSX.Element {
+  //
+  const searchCriteria: any = {
+    rel_rhy: 'rhyme with',
+    sl: 'sound like',
+    sp: 'are spelled like',
+  };
+
   return (
     <StyledList>
       <Button
@@ -43,7 +52,8 @@ export default function ResultsList({
         Return Home
       </Button>
       <Title className="list__title" level={3}>
-        Search results pertaining to '{wordInput}'
+        Search results pertaining words that {searchCriteria[wordType]} '
+        {wordInput}'
       </Title>
       {Object.values(data).map((result) => (
         <Result title={result.word} />

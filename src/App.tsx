@@ -8,10 +8,11 @@ import styled from 'styled-components';
 import ResultsList from './components/ResultsList';
 
 // Ant Design
-import { Input, Layout, Menu, Typography } from 'antd';
+import { Input, Layout, Menu, Typography, Select } from 'antd';
 const { Search } = Input;
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
+const { Option } = Select;
 
 const StyledApp = styled.main`
   display: flex;
@@ -44,28 +45,33 @@ const StyledApp = styled.main`
     }
   }
 
-  & .main__title {
-    color: #333;
-    padding: 0;
-    margin: 0;
-  }
-
-  & .main__subtitle {
-    color: #666;
-    font-style: italic;
-    text-transform: capitalize;
-    font-weight: 500;
-    padding: 0;
-    margin-top: 1em;
-    margin-bottom: 1.75em;
-  }
-
   & .main__content {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     margin-bottom: 7.5rem;
+
+    & .main__title {
+      color: #333;
+      padding: 0;
+      margin: 0 0 0.25em 0;
+    }
+
+    & .main__subtitle {
+      color: #666;
+      text-transform: capitalize;
+      font-weight: 500;
+      padding: 0;
+      margin-top: 1em;
+      margin-bottom: 1.65em;
+      font-size: 1.1em;
+    }
+
+    & .main__select {
+      margin: 0 0.5em;
+      color: #333;
+    }
   }
 
   & .layout {
@@ -77,6 +83,7 @@ export default function App() {
   const [resultsActive, setResultsActive] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [wordInput, setWordInput] = useState('');
+  const [wordType, setWordType] = useState('rel_rhy');
 
   /**
    * take word, get data from api
@@ -86,7 +93,7 @@ export default function App() {
    */
   async function getData(word: string) {
     const response = await fetch(
-      `https://api.datamuse.com/words?rel_rhy=${word}`
+      `https://api.datamuse.com/words?${wordType}=${word}`
     );
     const data = await response.json();
 
@@ -117,7 +124,18 @@ export default function App() {
           <Content className="main__content">
             <Title className="main__title">Wordmuse</Title>
             <Title className="main__subtitle" level={5}>
-              Find words that rhyme with your input
+              Find words that{' '}
+              <Select
+                className="main__select"
+                defaultValue={wordType}
+                style={{ width: 175 }}
+                onChange={(e) => setWordType(e)}
+              >
+                <Option value="rel_rhy">Rhyme With</Option>
+                <Option value="sl">Sound Like</Option>
+                <Option value="sp">Are Spelled Like</Option>
+              </Select>
+              your input
             </Title>
             <Search
               style={{ maxWidth: 500 }}
@@ -132,6 +150,7 @@ export default function App() {
           <ResultsList
             data={searchResults}
             wordInput={wordInput}
+            wordType={wordType}
             backHome={() => setResultsActive(false)}
           />
         )}
