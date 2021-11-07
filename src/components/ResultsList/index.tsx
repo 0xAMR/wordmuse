@@ -16,8 +16,15 @@ const StyledList = styled.div`
   margin: 0 auto;
 
   & .list__title {
-    padding: 2em 0;
+    padding: 2em 0 0.25em 0;
     font-size: 1.75em;
+  }
+
+  & .list__container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
@@ -39,6 +46,8 @@ export default function ResultsList({
     rel_rhy: 'rhyme with',
     sl: 'sound like',
     sp: 'are spelled like',
+    ml: 'are related to',
+    rel_ant: 'are antonyms of',
   };
 
   return (
@@ -55,9 +64,11 @@ export default function ResultsList({
         Search results pertaining words that {searchCriteria[wordType]} '
         {wordInput}'
       </Title>
-      {Object.values(data).map((result) => (
-        <Result title={result.word} />
-      ))}
+      <div className="list__container">
+        {Object.values(data).map((result) => (
+          <Result title={result.word} />
+        ))}
+      </div>
     </StyledList>
   );
 }
