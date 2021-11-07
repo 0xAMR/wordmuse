@@ -131,9 +131,11 @@ export default function App() {
                 style={{ width: 175 }}
                 onChange={(e) => setWordType(e)}
               >
-                <Option value="rel_rhy">Rhyme With</Option>
+                <Option value="rel_rhy">Rhyme with</Option>
                 <Option value="sl">Sound Like</Option>
                 <Option value="sp">Are Spelled Like</Option>
+                <Option value="ml">Are Related to</Option>
+                <Option value="rel_ant">Are Antonyms of</Option>
               </Select>
               your input
             </Title>
