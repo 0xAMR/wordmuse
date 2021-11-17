@@ -28,6 +28,13 @@ const StyledList = styled.div`
   }
 `;
 
+// check if object is empty
+const isEmpty = (obj: any) => {
+  for (const key in obj) return false;
+
+  return true;
+};
+
 type ResultsListProps = {
   data: object;
   wordInput: string;
@@ -60,10 +67,17 @@ export default function ResultsList({
       >
         Return Home
       </Button>
-      <Title className="list__title" level={3}>
-        Search results pertaining words that {searchCriteria[wordType]} '
-        {wordInput}'
-      </Title>
+      {isEmpty(data) ? (
+        <Title className="list__title" level={4}>
+          Sorry, we could not find any results for your search. Please try
+          searching for a different word.
+        </Title>
+      ) : (
+        <Title className="list__title" level={3}>
+          Search results pertaining to words that {searchCriteria[wordType]} '
+          {wordInput}'
+        </Title>
+      )}
       <div className="list__container">
         {Object.values(data).map((result) => (
           <Result title={result.word} />
