@@ -1,8 +1,12 @@
+// React
+import { useState } from 'react';
+
 // Styling
 import styled from 'styled-components';
 
 // Components
 import Result from '../Result';
+import Definition from '../Definition';
 
 // Ant Design
 import { Typography, Button } from 'antd';
@@ -48,7 +52,9 @@ export default function ResultsList({
   wordType,
   backHome,
 }: ResultsListProps): JSX.Element {
-  //
+  const [activeDefinition, setActiveDefinition] = useState(false);
+  const [definedWord, setDefinedWord] = useState('');
+
   const searchCriteria: any = {
     rel_rhy: 'rhyme with',
     sl: 'sound like',
@@ -67,22 +73,34 @@ export default function ResultsList({
       >
         Return Home
       </Button>
+
       {isEmpty(data) ? (
         <Title className="list__title" level={4}>
           Sorry, we could not find any results for your search. Please try
           searching for a different word.
         </Title>
       ) : (
-        <Title className="list__title" level={3}>
-          Search results pertaining to words that {searchCriteria[wordType]} '
-          {wordInput}'
-        </Title>
+        !activeDefinition && (
+          <Title className="list__title" level={3}>
+            Search results pertaining to words that {searchCriteria[wordType]} '
+            {wordInput}'
+          </Title>
+        )
       )}
-      <div className="list__container">
-        {Object.values(data).map((result) => (
-          <Result title={result.word} />
-        ))}
-      </div>
+
+      {activeDefinition ? (
+        <Definition definedWord={definedWord} />
+      ) : (
+        <div className="list__container">
+          {Object.values(data).map((result) => (
+            <Result
+              search={setDefinedWord}
+              define={setActiveDefinition}
+              title={result.word}
+            />
+          ))}
+        </div>
+      )}
     </StyledList>
   );
 }
