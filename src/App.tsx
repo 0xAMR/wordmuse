@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import ResultsList from './components/ResultsList';
 
 // Ant Design
-import { Input, Layout, Typography, Select } from 'antd';
+import { Input, Layout, Typography, Select, Menu } from 'antd';
 const { Search } = Input;
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
@@ -37,6 +37,7 @@ const StyledApp = styled.main`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding: 0 0 0 3em;
 
     & .main__logo {
       color: white;
@@ -115,6 +116,16 @@ export default function App() {
       <Layout className="layout main__layout">
         <Header className="main__header">
           <div className="main__logo">Wordmuse</div>
+          <Menu
+            className="main__menu"
+            style={{ width: '300px' }}
+            theme="dark"
+            mode="horizontal"
+          >
+            <Menu.Item key="about">About</Menu.Item>
+            <Menu.Item key="register"> Register</Menu.Item>
+            <Menu.Item key="contact">Contact</Menu.Item>
+          </Menu>
         </Header>
         {!resultsActive ? (
           <Content className="main__content">

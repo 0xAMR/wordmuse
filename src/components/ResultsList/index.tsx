@@ -66,16 +66,18 @@ export default function ResultsList({
   return (
     <StyledList>
       <Button
-        onClick={backHome}
+        onClick={() => {
+          activeDefinition ? setActiveDefinition(false) : backHome();
+        }}
         type="primary"
         icon={<ArrowLeftOutlined />}
         size="large"
       >
-        Return Home
+        {activeDefinition ? 'Back' : 'Return Home'}
       </Button>
 
       {isEmpty(data) ? (
-        <Title className="list__title" level={4}>
+        <Title className="list__title" level={3}>
           Sorry, we could not find any results for your search. Please try
           searching for a different word.
         </Title>
@@ -94,6 +96,7 @@ export default function ResultsList({
         <div className="list__container">
           {Object.values(data).map((result) => (
             <Result
+              key={result.word}
               search={setDefinedWord}
               define={setActiveDefinition}
               title={result.word}
