@@ -15,7 +15,7 @@ type DefinitionProps = {
 };
 
 export default function Definition({ definedWord }: DefinitionProps) {
-  const [test, setTest] = useState<any[]>([]);
+  const [definition, setDefinition] = useState<any[]>([]);
 
   // fetch definition on mount
   useEffect(() => {
@@ -25,18 +25,18 @@ export default function Definition({ definedWord }: DefinitionProps) {
       );
       const _data = await response.json();
 
-      setTest(_data);
+      setDefinition(_data);
     })();
   }, [definedWord]);
 
   return (
     <StyledDefinition>
-      {test.length > 0 && (
+      {definition.length > 0 && (
         <>
           <Title className="list__title" level={3}>
-            {test[0]?.phonetic}
+            {definition[0]?.phonetic}
           </Title>
-          <p>{test[0]?.meanings[0]?.definitions[0]?.definition}</p>
+          <p>{definition[0]?.meanings[0]?.definitions[0]?.definition}</p>
         </>
       )}
     </StyledDefinition>
