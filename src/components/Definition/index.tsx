@@ -31,13 +31,21 @@ export default function Definition({ definedWord }: DefinitionProps) {
 
   return (
     <StyledDefinition>
-      {definition.length > 0 && (
+      {definition.length > 0 ? (
         <>
           <Title className="list__title" level={3}>
-            {definition[0]?.phonetic}
+            {definition[0]?.word}
           </Title>
-          <p>{definition[0]?.meanings[0]?.definitions[0]?.definition}</p>
+          <p style={{ fontStyle: 'italic' }}>{definition[0]?.phonetic}</p>
+          {definition[0]?.meanings.map((item: any) => (
+            <>
+              <p style={{ fontWeight: 'bold' }}>{item?.partOfSpeech}</p>
+              <p>{item.definitions[0].definition}</p>
+            </>
+          ))}
         </>
+      ) : (
+        <p>Sorry, we don't have a definition for "{definedWord}" yet.</p>
       )}
     </StyledDefinition>
   );
