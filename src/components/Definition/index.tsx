@@ -8,7 +8,35 @@ import styled from 'styled-components';
 import { Typography } from 'antd';
 const { Title } = Typography;
 
-const StyledDefinition = styled.div``;
+const StyledDefinition = styled.div`
+  & .def__title {
+    margin: 1.5em 0 0.25em 0;
+  }
+
+  & .def__ipa {
+    font-weight: 600;
+    color: #777;
+  }
+
+  & .def__word {
+    h3 {
+      font-weight: 600;
+      margin: 0 0 0.25em 0;
+      font-size: 1.2em;
+    }
+
+    p {
+      font-size: 1.1em;
+      color: #333;
+    }
+  }
+
+  & hr {
+    border: none;
+    border-bottom: 1px solid #ddd;
+    margin: 1em 0;
+  }
+`;
 
 type DefinitionProps = {
   definedWord: string;
@@ -33,15 +61,17 @@ export default function Definition({ definedWord }: DefinitionProps) {
     <StyledDefinition>
       {definition.length > 0 ? (
         <>
-          <Title className="list__title" level={3}>
+          <Title className="def__title" level={3}>
             {definition[0]?.word}
           </Title>
-          <p style={{ fontStyle: 'italic' }}>{definition[0]?.phonetic}</p>
+          <p className="def__ipa">{definition[0]?.phonetic}</p>
+          <hr />
           {definition[0]?.meanings.map((item: any) => (
-            <>
-              <p style={{ fontWeight: 'bold' }}>{item?.partOfSpeech}</p>
+            <div className="def__word">
+              <h3>{item?.partOfSpeech}</h3>
               <p>{item.definitions[0].definition}</p>
-            </>
+              <hr />
+            </div>
           ))}
         </>
       ) : (
