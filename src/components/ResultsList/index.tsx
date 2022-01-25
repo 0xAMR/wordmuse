@@ -55,7 +55,7 @@ export default function ResultsList({
   const [activeDefinition, setActiveDefinition] = useState(false);
   const [definedWord, setDefinedWord] = useState('');
 
-  const searchCriteria: any = {
+  const searchCriteria: Record<string, string> = {
     rel_rhy: 'rhyme with',
     sl: 'sound like',
     sp: 'are spelled like',
