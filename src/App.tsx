@@ -1,11 +1,13 @@
 // React
 import { useState } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 
 // Styling
 import styled from 'styled-components';
 
 // Components
 import ResultsList from './components/ResultsList';
+import Definition from './components/Definition';
 
 // Ant Design
 import { Input, Layout, Typography, Select, Menu } from 'antd';
@@ -85,6 +87,7 @@ export default function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [wordInput, setWordInput] = useState('');
   const [wordType, setWordType] = useState('rel_rhy');
+  const navigate = useNavigate();
 
   /**
    * take word, get data from api
@@ -108,6 +111,7 @@ export default function App() {
     getData(wordInput).then((data) => {
       setSearchResults(data);
       setResultsActive(true);
+      navigate(`/search/${wordInput}`);
     });
   };
 
@@ -127,42 +131,57 @@ export default function App() {
             <Menu.Item key="contact">Contact</Menu.Item>
           </Menu>
         </Header>
-        {!resultsActive ? (
-          <Content className="main__content">
-            <Title className="main__title">Wordmuse</Title>
-            <Title className="main__subtitle" level={5}>
-              Find words that{' '}
-              <Select
-                className="main__select"
-                defaultValue={wordType}
-                style={{ width: 175 }}
-                onChange={(e) => setWordType(e)}
-              >
-                <Option value="rel_rhy">Rhyme with</Option>
-                <Option value="sl">Sound Like</Option>
-                <Option value="sp">Are Spelled Like</Option>
-                <Option value="ml">Are Related to</Option>
-                <Option value="rel_ant">Are Antonyms of</Option>
-              </Select>
-              your input
-            </Title>
-            <Search
-              style={{ maxWidth: 500 }}
-              placeholder="Enter word"
-              size="large"
-              onChange={(e) => setWordInput(e.target.value)}
-              onSearch={handleSearch}
-              enterButton
-            />
-          </Content>
-        ) : (
-          <ResultsList
-            data={searchResults}
-            wordInput={wordInput}
-            wordType={wordType}
-            backHome={() => setResultsActive(false)}
+
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Content className="main__content">
+                <Title className="main__title">Wordmuse</Title>
+                <Title className="main__subtitle" level={5}>
+                  Find words that{' '}
+                  <Select
+                    className="main__select"
+                    defaultValue={wordType}
+                    style={{ width: 175 }}
+                    onChange={(e) => setWordType(e)}
+                  >
+                    <Option value="rel_rhy">Rhyme with</Option>
+                    <Option value="sl">Sound Like</Option>
+                    <Option value="sp">Are Spelled Like</Option>
+                    <Option value="ml">Are Related to</Option>
+                    <Option value="rel_ant">Are Antonyms of</Option>
+                  </Select>
+                  your input
+                </Title>
+                <Search
+                  style={{ maxWidth: 500 }}
+                  placeholder="Enter word"
+                  size="large"
+                  onChange={(e) => setWordInput(e.target.value)}
+                  onSearch={handleSearch}
+                  enterButton
+                />
+              </Content>
+            }
           />
-        )}
+          <Route path="search">
+            <Route
+              path=":word"
+              element={
+                <ResultsList
+                  data={searchResults}
+                  wordInput={wordInput}
+                  wordType={wordType}
+                  backHome={() => setResultsActive(false)}
+                />
+              }
+            />
+          </Route>
+          <Route path="definition">
+            <Route path=":word" element={<Definition />} />
+          </Route>
+        </Routes>
         <Footer className="main__footer">© Wordmuse 2021</Footer>
       </Layout>
     </StyledApp>
