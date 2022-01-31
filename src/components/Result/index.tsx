@@ -38,17 +38,13 @@ const StyledResult = styled.button`
 
 type ResultsProps = {
   title: string;
-  define: (active: boolean) => void;
-  search: (word: string) => void;
+  onClick: () => void;
 };
 
-export default function Result({ title, search, define }: ResultsProps) {
+export default function Result({ title, onClick }: ResultsProps) {
   return (
     <StyledResult
-      onClick={() => {
-        define(true);
-        search(title);
-      }}
+      onClick={onClick}
       title={`Click for a full definition of ${title}`}
     >
       <Content className="result__content">

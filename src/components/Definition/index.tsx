@@ -1,5 +1,6 @@
 // React
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 // Styling
 import styled from 'styled-components';
@@ -38,36 +39,36 @@ const StyledDefinition = styled.div`
   }
 `;
 
-type DefinitionProps = {
-  definedWord: string;
-};
-
-export default function Definition({ definedWord }: DefinitionProps) {
+export default function Definition() {
   const [definition, setDefinition] = useState<any[]>([]);
+  const params = useParams();
 
   // fetch definition on mount
   useEffect(() => {
     (async () => {
       const response = await fetch(
-        `https://api.dictionaryapi.dev/api/v2/entries/en/${definedWord}`
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${params.word}`
       );
       const _data = await response.json();
 
+      console.log('🚀 ~  file: index.tsx ~ line 51 ~ params.word', params.word);
+
       setDefinition(_data);
     })();
-  }, [definedWord]);
+  }, [params]);
 
   return (
     <StyledDefinition>
-      {definition.length > 0 ? (
+      {definition ? (
         <>
           <Title className="def__title" level={3}>
             {definition[0]?.word}
+            <p>test</p>
           </Title>
           <p className="def__ipa">{definition[0]?.phonetic}</p>
           <hr />
           {definition[0]?.meanings.map((item: any) => (
-            <div className="def__word">
+            <div key={item?.partOfSpeech} className="def__word">
               <h3>{item?.partOfSpeech}</h3>
               <p>{item.definitions[0].definition}</p>
               <hr />
@@ -75,7 +76,7 @@ export default function Definition({ definedWord }: DefinitionProps) {
           ))}
         </>
       ) : (
-        <p>Sorry, we don't have a definition for "{definedWord}" yet.</p>
+        <p>Sorry, we don't have a definition for "{params.word}" yet.</p>
       )}
     </StyledDefinition>
   );

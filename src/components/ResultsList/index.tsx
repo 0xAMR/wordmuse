@@ -1,5 +1,6 @@
 // React
 import { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 // Styling
 import styled from 'styled-components';
@@ -54,6 +55,8 @@ export default function ResultsList({
 }: ResultsListProps): JSX.Element {
   const [activeDefinition, setActiveDefinition] = useState(false);
   const [definedWord, setDefinedWord] = useState('');
+  const params = useParams();
+  const navigate = useNavigate();
 
   const searchCriteria: Record<string, string> = {
     rel_rhy: 'rhyme with',
@@ -66,9 +69,7 @@ export default function ResultsList({
   return (
     <StyledList>
       <Button
-        onClick={() => {
-          activeDefinition ? setActiveDefinition(false) : backHome();
-        }}
+        onClick={() => navigate('/')}
         type="primary"
         icon={<ArrowLeftOutlined />}
         size="large"
@@ -79,7 +80,7 @@ export default function ResultsList({
       {isEmpty(data) ? (
         <Title className="list__title" level={3}>
           Sorry, we could not find any results for your search. Please try
-          searching for a different word.
+          searching for a different word. {params.word}
         </Title>
       ) : (
         !activeDefinition && (
@@ -91,14 +92,13 @@ export default function ResultsList({
       )}
 
       {activeDefinition ? (
-        <Definition definedWord={definedWord} />
+        <p>placeholder</p>
       ) : (
         <div className="list__container">
           {Object.values(data).map((result) => (
             <Result
               key={result.word}
-              search={setDefinedWord}
-              define={setActiveDefinition}
+              onClick={() => navigate(`/definition/${result.word}`)}
               title={result.word}
             />
           ))}
