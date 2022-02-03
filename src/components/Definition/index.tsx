@@ -1,15 +1,21 @@
 // React
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 // Styling
 import styled from 'styled-components';
 
 // Ant Design
-import { Typography } from 'antd';
+import { Typography, Button } from 'antd';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 const { Title } = Typography;
 
 const StyledDefinition = styled.div`
+  width: 100%;
+  max-width: 750px;
+  padding: 2em 1em;
+  margin: 0 auto;
+
   & .def__title {
     margin: 1.5em 0 0.25em 0;
   }
@@ -42,6 +48,7 @@ const StyledDefinition = styled.div`
 export default function Definition() {
   const [definition, setDefinition] = useState<any[]>([]);
   const params = useParams();
+  const navigate = useNavigate();
 
   // fetch definition on mount
   useEffect(() => {
@@ -51,9 +58,9 @@ export default function Definition() {
       );
       const _data = await response.json();
 
-      console.log('🚀 ~  file: index.tsx ~ line 51 ~ params.word', params.word);
-
       setDefinition(_data);
+
+      return () => setDefinition([]);
     })();
   }, [params]);
 
@@ -61,9 +68,16 @@ export default function Definition() {
     <StyledDefinition>
       {definition ? (
         <>
+          <Button
+            onClick={() => navigate(`/search/${params.word}`)}
+            type="primary"
+            icon={<ArrowLeftOutlined />}
+            size="large"
+          >
+            Back
+          </Button>{' '}
           <Title className="def__title" level={3}>
             {definition[0]?.word}
-            <p>test</p>
           </Title>
           <p className="def__ipa">{definition[0]?.phonetic}</p>
           <hr />

@@ -83,37 +83,9 @@ const StyledApp = styled.main`
 `;
 
 export default function App() {
-  const [resultsActive, setResultsActive] = useState(false);
-  const [searchResults, setSearchResults] = useState([]);
   const [wordInput, setWordInput] = useState('');
   const [wordType, setWordType] = useState('rel_rhy');
   const navigate = useNavigate();
-
-  /**
-   * take word, get data from api
-   *
-   * @param {string} word input string
-   * @returns words that match the input string
-   */
-  async function getData(word: string) {
-    const response = await fetch(
-      `https://api.datamuse.com/words?${wordType}=${word}`
-    );
-    const data = await response.json();
-
-    return data;
-  }
-
-  /**
-   * handle search by getting and displaying data
-   */
-  const handleSearch = () => {
-    getData(wordInput).then((data) => {
-      setSearchResults(data);
-      setResultsActive(true);
-      navigate(`/search/${wordInput}`);
-    });
-  };
 
   return (
     <StyledApp>
@@ -159,7 +131,7 @@ export default function App() {
                   placeholder="Enter word"
                   size="large"
                   onChange={(e) => setWordInput(e.target.value)}
-                  onSearch={handleSearch}
+                  onSearch={() => navigate(`/search/${wordInput}`)}
                   enterButton
                 />
               </Content>
@@ -170,10 +142,9 @@ export default function App() {
               path=":word"
               element={
                 <ResultsList
-                  data={searchResults}
                   wordInput={wordInput}
                   wordType={wordType}
-                  backHome={() => setResultsActive(false)}
+                  backHome={() => {}}
                 />
               }
             />
@@ -182,7 +153,7 @@ export default function App() {
             <Route path=":word" element={<Definition />} />
           </Route>
         </Routes>
-        <Footer className="main__footer">© Wordmuse 2021</Footer>
+        <Footer className="main__footer">© Wordmuse 2022</Footer>
       </Layout>
     </StyledApp>
   );
