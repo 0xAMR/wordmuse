@@ -123,7 +123,7 @@ const Home: NextPage = () => {
             placeholder="Enter word"
             size="large"
             onChange={(e) => setWordInput(e.target.value)}
-            onSearch={() => router.push('/search')}
+            onSearch={() => router.push(`/search/${wordInput}`)}
             enterButton
           />
         </Content>
