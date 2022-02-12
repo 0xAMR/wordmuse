@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 // Next
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 
 // Styling
 import styled from 'styled-components';
@@ -81,6 +82,11 @@ const StyledApp = styled.main`
 `;
 
 const Home: NextPage = () => {
+  const [wordInput, setWordInput] = useState('');
+  const [wordType, setWordType] = useState('rel_rhy');
+
+  const router = useRouter();
+
   return (
     <StyledApp>
       <Layout className="layout main__layout">
@@ -91,11 +97,7 @@ const Home: NextPage = () => {
             style={{ width: '300px' }}
             theme="dark"
             mode="horizontal"
-          >
-            <Menu.Item key="about">About</Menu.Item>
-            <Menu.Item key="register"> Register</Menu.Item>
-            <Menu.Item key="contact">Contact</Menu.Item>
-          </Menu>
+          ></Menu>
         </Header>
 
         <Content className="main__content">
@@ -104,9 +106,9 @@ const Home: NextPage = () => {
             Find words that{' '}
             <Select
               className="main__select"
-              defaultValue={'test'}
+              defaultValue={wordType}
               style={{ width: 175 }}
-              onChange={(e) => {}}
+              onChange={(e) => setWordType(e)}
             >
               <Option value="rel_rhy">Rhyme with</Option>
               <Option value="sl">Sound Like</Option>
@@ -120,8 +122,8 @@ const Home: NextPage = () => {
             style={{ maxWidth: 500 }}
             placeholder="Enter word"
             size="large"
-            onChange={(e) => {}}
-            onSearch={() => {}}
+            onChange={(e) => setWordInput(e.target.value)}
+            onSearch={() => router.push('/search')}
             enterButton
           />
         </Content>
