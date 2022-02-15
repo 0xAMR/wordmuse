@@ -65,33 +65,33 @@ export default function ResultsList({
     rel_ant: 'are antonyms of',
   };
 
-  /**
-   * take word, get data from api
-   *
-   * @param {string} word input string
-   * @returns words that match the input string
-   */
-  async function getData(word: string | string[] | undefined) {
-    const response = await fetch(
-      `https://api.datamuse.com/words?${wordType}=${word}`
-    );
-    const data = await response.json();
-
-    return data;
-  }
-
   useEffect(() => {
     const _word = id;
+    /**
+     * take word, get data from api
+     *
+     * @param {string} word input string
+     * @returns words that match the input string
+     */
+    async function getData(word: string | string[] | undefined) {
+      const response = await fetch(
+        `https://api.datamuse.com/words?${'rel_rhy'}=${word}`
+      );
+      const data = await response.json();
+
+      return data;
+    }
+    console.log('🚀 ~ file: [id].tsx ~ line 85 ~ useEffect ~ _word', id);
 
     getData(_word).then((data) => {
       setSearchResults(data);
     });
-  }, [getData, id]);
+  }, [id, wordType]);
 
   return (
     <StyledList>
       <Button
-        onClick={() => {}}
+        onClick={() => router.replace('/')}
         type="primary"
         icon={<ArrowLeftOutlined />}
         size="large"
@@ -102,7 +102,7 @@ export default function ResultsList({
       {isEmpty({}) ? (
         <Title className="list__title" level={3}>
           Sorry, we could not find any results for your search. Please try
-          searching for a different word. {id}
+          searching for a different word.
         </Title>
       ) : (
         <Title className="list__title" level={3}>

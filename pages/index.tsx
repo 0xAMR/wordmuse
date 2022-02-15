@@ -11,7 +11,7 @@ import styled from 'styled-components';
 // Ant Design
 import { Input, Layout, Typography, Select, Menu } from 'antd';
 const { Search } = Input;
-const { Header, Content, Footer } = Layout;
+const { Content, Footer } = Layout;
 const { Title } = Typography;
 const { Option } = Select;
 
@@ -31,19 +31,6 @@ const StyledApp = styled.main`
       color: #888;
       font-size: 0.95em;
       text-align: center;
-    }
-  }
-
-  & .main__header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 0 0 0 3em;
-
-    & .main__logo {
-      color: white;
-      font-size: 1.75em;
-      font-weight: 600;
     }
   }
 
@@ -90,16 +77,6 @@ const Home: NextPage = () => {
   return (
     <StyledApp>
       <Layout className="layout main__layout">
-        <Header className="main__header">
-          <div className="main__logo">Wordmuse</div>
-          <Menu
-            className="main__menu"
-            style={{ width: '300px' }}
-            theme="dark"
-            mode="horizontal"
-          ></Menu>
-        </Header>
-
         <Content className="main__content">
           <Title className="main__title">Wordmuse</Title>
           <Title className="main__subtitle" level={5}>
