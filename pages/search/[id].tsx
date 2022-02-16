@@ -6,9 +6,11 @@ import { useEffect, useState } from 'react';
 
 // Styling
 import styled from 'styled-components';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
 // Components
 import Result from '../../components/result';
+import { Rings } from 'react-loader-spinner';
 
 // Ant Design
 import { Typography, Button } from 'antd';
@@ -17,9 +19,18 @@ const { Title } = Typography;
 
 const StyledList = styled.div`
   width: 100%;
+  height: 100%;
   max-width: 750px;
   padding: 2em 1em;
   margin: 0 auto;
+
+  & .list__loader {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
   & .list__title {
     padding: 2em 0 0.25em 0;
@@ -42,20 +53,17 @@ const isEmpty = (obj: any) => {
 };
 
 type ResultsListProps = {
-  wordInput: string;
-  wordType: string;
   backHome: () => void;
 };
 
 export default function ResultsList({
-  wordInput,
-  wordType,
   backHome,
 }: ResultsListProps): JSX.Element {
   const [searchResults, setSearchResults] = useState({});
+  const [loaderOn, setLoaderOn] = useState(true);
 
   const router = useRouter();
-  const { id } = router.query;
+  const { id, wordType } = router.query;
 
   const searchCriteria: Record<string, string> = {
     rel_rhy: 'rhyme with',
@@ -66,6 +74,8 @@ export default function ResultsList({
   };
 
   useEffect(() => {
+    if (!wordType || !id) return;
+
     const _word = id;
     /**
      * take word, get data from api
@@ -75,13 +85,14 @@ export default function ResultsList({
      */
     async function getData(word: string | string[] | undefined) {
       const response = await fetch(
-        `https://api.datamuse.com/words?${'rel_rhy'}=${word}`
+        `https://api.datamuse.com/words?${wordType}=${word}`
       );
       const data = await response.json();
 
+      setLoaderOn(false);
+
       return data;
     }
-    console.log('🚀 ~ file: [id].tsx ~ line 85 ~ useEffect ~ _word', id);
 
     getData(_word).then((data) => {
       setSearchResults(data);
@@ -99,20 +110,25 @@ export default function ResultsList({
         Back
       </Button>
 
-      {isEmpty({}) ? (
-        <Title className="list__title" level={3}>
-          Sorry, we could not find any results for your search. Please try
-          searching for a different word.
-        </Title>
+      {loaderOn ? (
+        <div className="list__loader">
+          <Rings color="#1890ff" height={250} width={250} />
+        </div>
       ) : (
         <Title className="list__title" level={3}>
-          Search results pertaining to words that...
+          {isEmpty(searchResults)
+            ? 'Sorry, we could not find any results for your search. Please try          searching for a different word.'
+            : `Search results pertaining to words
+          that ${wordType} ${id}`}
         </Title>
       )}
-
       <div className="list__container">
         {Object.values(searchResults).map((result: any) => (
-          <Result key={result.word} onClick={() => {}} title={result.word} />
+          <Result
+            key={result.word}
+            onClick={() => router.push(`/define/${result.word}`)}
+            title={result.word}
+          />
         ))}
       </div>
     </StyledList>
