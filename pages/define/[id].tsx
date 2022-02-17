@@ -59,7 +59,14 @@ const StyledDefinition = styled.div`
 `;
 
 export default function Define() {
-  const [definition, setDefinition] = useState<any[]>([]);
+  const [definition, setDefinition] = useState<{
+    word?: string;
+    phonetic?: string;
+    meanings?: {
+      partOfSpeech?: string;
+      definitions?: any;
+    }[];
+  }>({});
   const [loaderOn, setLoaderOn] = useState(true);
 
   const router = useRouter();
@@ -73,10 +80,10 @@ export default function Define() {
       );
       const _data = await response.json();
 
-      setDefinition(_data);
+      setDefinition(_data[0]);
       setLoaderOn(false);
 
-      return () => setDefinition([]);
+      return () => setDefinition({});
     })();
   }, [id]);
 
@@ -98,14 +105,14 @@ export default function Define() {
       ) : definition ? (
         <>
           <Title className="def__title" level={3}>
-            {definition[0]?.word}
+            {definition?.word}
           </Title>
-          <p className="def__ipa">{definition[0]?.phonetic}</p>
+          <p className="def__ipa">{definition?.phonetic}</p>
           <hr />
-          {definition[0]?.meanings.map((item: any) => (
+          {definition?.meanings?.map((item) => (
             <div key={item?.partOfSpeech} className="def__word">
               <h3>{item?.partOfSpeech}</h3>
-              <p>{item.definitions[0].definition}</p>
+              <p>{item?.definitions[0]?.definition}</p>
               <hr />
             </div>
           ))}

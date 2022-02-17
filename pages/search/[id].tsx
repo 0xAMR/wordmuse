@@ -15,6 +15,7 @@ import { Rings } from 'react-loader-spinner';
 // Ant Design
 import { Typography, Button } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
+import { valueType } from 'antd/lib/statistic/utils';
 const { Title } = Typography;
 
 const StyledList = styled.div`
@@ -46,7 +47,7 @@ const StyledList = styled.div`
 `;
 
 // check if object is empty
-const isEmpty = (obj: any) => {
+const isEmpty = (obj: object) => {
   for (const key in obj) return false;
 
   return true;
@@ -56,22 +57,31 @@ type ResultsListProps = {
   backHome: () => void;
 };
 
+const searchCriteria: Record<string, string> = {
+  rel_rhy: 'rhyme with',
+  sl: 'sound like',
+  sp: 'are spelled like',
+  ml: 'are related to',
+  rel_ant: 'are antonyms of',
+};
+
 export default function ResultsList({
   backHome,
 }: ResultsListProps): JSX.Element {
-  const [searchResults, setSearchResults] = useState({});
+  const [searchResults, setSearchResults] = useState<
+    {
+      word: string;
+    }[]
+  >([]);
   const [loaderOn, setLoaderOn] = useState(true);
 
   const router = useRouter();
   const { id, wordType } = router.query;
 
-  const searchCriteria: Record<string, string> = {
-    rel_rhy: 'rhyme with',
-    sl: 'sound like',
-    sp: 'are spelled like',
-    ml: 'are related to',
-    rel_ant: 'are antonyms of',
-  };
+  const selectedCriteria =
+    wordType && typeof wordType !== 'object'
+      ? searchCriteria[wordType]
+      : searchCriteria['rel_rhy'];
 
   useEffect(() => {
     if (!wordType || !id) return;
@@ -87,6 +97,17 @@ export default function ResultsList({
       const response = await fetch(
         `https://api.datamuse.com/words?${wordType}=${word}`
       );
+
+      // to handle errors
+      if (response.status > 299 || response.status < 200) {
+        alert('error');
+      }
+
+      // to be defined
+      type Data = {
+        key: [];
+      };
+
       const data = await response.json();
 
       setLoaderOn(false);
@@ -95,7 +116,7 @@ export default function ResultsList({
     }
 
     getData(_word).then((data) => {
-      setSearchResults(data);
+      setSearchResults(Object.values(data));
     });
   }, [id, wordType]);
 
@@ -119,11 +140,11 @@ export default function ResultsList({
           {isEmpty(searchResults)
             ? 'Sorry, we could not find any results for your search. Please try          searching for a different word.'
             : `Search results pertaining to words
-          that ${wordType} ${id}`}
+          that ${selectedCriteria} ${id}`}
         </Title>
       )}
       <div className="list__container">
-        {Object.values(searchResults).map((result: any) => (
+        {searchResults.map((result) => (
           <Result
             key={result.word}
             onClick={() => router.push(`/define/${result.word}`)}
