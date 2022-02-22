@@ -6,9 +6,13 @@ import styled from 'styled-components';
 
 // Ant Design
 import { Layout, Menu } from 'antd';
-const { Header } = Layout;
+const { Header, Footer } = Layout;
 
-const StyledHeader = styled.main`
+const StyledMain = styled.main`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
   & .main__header {
     display: flex;
     flex-direction: row;
@@ -21,11 +25,18 @@ const StyledHeader = styled.main`
       font-weight: 600;
     }
   }
+
+  & .main__footer {
+    background-color: transparent;
+    color: #888;
+    font-size: 0.95em;
+    text-align: center;
+  }
 `;
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <StyledHeader>
+    <StyledMain>
       <Header className="main__header">
         <div className="main__logo">Wordmuse</div>
         <Menu
@@ -36,7 +47,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         ></Menu>
       </Header>
       <Component {...pageProps} />
-    </StyledHeader>
+      <Footer className="main__footer">© Wordmuse 2022</Footer>
+    </StyledMain>
   );
 }
 

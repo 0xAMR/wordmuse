@@ -9,9 +9,9 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 // Ant Design
-import { Input, Layout, Typography, Select, Menu } from 'antd';
+import { Input, Layout, Typography, Select } from 'antd';
 const { Search } = Input;
-const { Content, Footer } = Layout;
+const { Content } = Layout;
 const { Title } = Typography;
 const { Option } = Select;
 
@@ -20,18 +20,11 @@ const StyledApp = styled.main`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
   overflow: hidden;
+  flex: 1;
 
   & .main__layout {
     background-color: rgba(252, 252, 252);
-
-    & .main__footer {
-      background-color: transparent;
-      color: #888;
-      font-size: 0.95em;
-      text-align: center;
-    }
   }
 
   & .main__content {
@@ -109,8 +102,6 @@ const Home: NextPage = () => {
             enterButton
           />
         </Content>
-
-        <Footer className="main__footer">© Wordmuse 2022</Footer>
       </Layout>
     </StyledApp>
   );
