@@ -123,7 +123,7 @@ export default function ResultsList({
   return (
     <StyledList>
       <Button
-        onClick={() => router.replace('/')}
+        onClick={() => router.back()}
         type="primary"
         icon={<ArrowLeftOutlined />}
         size="large"
